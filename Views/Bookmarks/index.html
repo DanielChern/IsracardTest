@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js" ></script>
+    <script src="../../scripts/app.js"></script>
+    <script src="../../scripts/jquery-3.0.0.js"></script>
+    <link href="../../Content/bootstrap.css"  type="text/css" rel="stylesheet"/>
+    <link href="../../Content/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../../scripts/toastr.js"></script>
+    <link href="../../Content/toastr.css" rel="stylesheet" />
+    <style>
+        html , body{
+            height:100%;
+        }
+
+        .card{
+            width: 18rem;
+            margin:2px;
+            padding:1px;
+            text-align:left;
+            display:inline-block;
+        }
+        #fields-block{
+            text-align:center;
+        }
+        .card-text{
+            display:inline-block;
+            width: 8rem;
+            margin:0;
+        }
+        #serch{
+            height:200px;
+            position: relative;
+            z-index:1;
+            background-image:url('../../Content/images/bg-half.jpg');
+            background-size:100% 100%;
+        }
+        #fields-block{
+            margin-top:30px;
+        }
+        .page-background{
+            height:100%;
+            width:100%;
+            position:fixed;
+            z-index:0;
+            background-color:rgba(104, 101, 101, 0.52);
+        }
+        .container{
+                max-width: 1140px;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%)
+        }
+        .holder {
+                font-size: 3rem;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                margin-left: auto;
+                margin-right: auto;
+                width: 100%;
+        }
+        .pagination{
+            display:inline-flex;
+        }
+
+    </style>
+</head>
+<body ng-app="mainPage" ng-controller="mainPageCtrl" ng-init="initPage()">
+    <!--<div class="page-background"></div>-->
+    <div id="serch">
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+
+
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-10 col-lg-8">
+                            <div class="card card-sm" style="width:100%;text-align:center;">
+                                <div class="card-body row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <i class="fas fa-search h4 text-body"></i>
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col">
+                                        <input ng-model="searchWord" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search topics or keywords">
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col-auto">
+                                        <button ng-click="findRepositories()" class="btn btn-lg btn-primary" type="submit">Search</button>
+                                    </div>
+                                    <!--end of col-->
+                                </div>
+                                <div class="btn btn-lg btn-primary" ng-click="getAllBookmarks()"> Get my bookmarks </div>
+                            </div>
+
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        </div>
+
+        <div id="fields-block">
+            <div id="space-holder" ng-show="!currentFilter.ElementsCount || showHolder">
+                <div class="holder">
+                    {{holderContext}}
+                </div>
+            </div>
+            <div class="card border-primary" ng-repeat="row in gitHubRows">
+                <img class="card-img-top" src="{{row.Image}}" alt="Card image cap" style="display:inline-block; width: 4rem;height:4rem;">
+                <div class="card-body" style="display: inline-block;">
+                    <p class="card-text">{{row.Name | cut:true:10}}</p>
+                    <span ng-show="!isBookmark" ng-click="addToBookmatks(row , this)" style="display:inline-block;" class="btn btn-outline-primary">+</span>
+                </div>
+
+            </div>
+            <div>
+                <nav aria-label="..." ng-show="currentFilter.ElementsCount && currentFilter.PagesCount > 1">
+                    <ul class="pagination">
+                        <li class="page-item {{currentFilter.CurrentPage == 1 ? 'disabled' : ''}}">
+                            <a ng-click="nextPrevPage('prev')" class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <!--<li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+                        <li class="page-item {{currentFilter.CurrentPage == currentFilter.PagesCount ? 'disabled' : ''}}">
+                            <a class="page-link" ng-click="nextPrevPage('next')">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+</body>
+</html>
